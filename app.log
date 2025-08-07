@@ -1,0 +1,2 @@
+2025-08-06 14:27:02 [INFO] [Untitled-1.py:20] Erro ao tentar converter o salário: could not convert string to float: 'asd'
+2025-08-06 14:27:41 [INFO] [Untitled-1.py:20] Erro ao tentar converter o salário: could not convert string to float: 'sdsd'
