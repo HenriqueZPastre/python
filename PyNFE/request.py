@@ -1,6 +1,6 @@
 import requests
 import time
-from utils.readjson import readJson
+from utils.readjson import read_json
 import os
 
 url = 'https://www.sefaz.rs.gov.br/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp'
@@ -20,10 +20,10 @@ headers = {
     "upgrade-insecure-requests": "1"
 }
 
-chavesNfe = readJson('chaves.json')
+chavesNfe = read_json('PyNFE/chaves.json')
 print(len(chavesNfe))
 
-def bodyData(chave):
+def bodyData(chave: str) -> dict[str, str]:
 	data = {
 		"HML": "false",
 		"chaveNFe": chave,
@@ -31,9 +31,13 @@ def bodyData(chave):
 	}
 	return data
 
+def salvarPagina(chave, response_text) -> None:
+	with open(f"PyNFE/chaves/{chave}.html", "w", encoding="utf-8") as file:
+		file.write(response_text)
+	print(f"Response for {chave} saved to ./chaves/{chave}.html")
 
-def consultarChaves(chaves):
-    os.makedirs("./chaves", exist_ok=True)
+def consultarChaves(chaves: list) -> None:
+    os.makedirs("PyNFE/chaves", exist_ok=True)
     for chave in chaves:
         dadosRequest= bodyData(chave)
         try:
@@ -43,10 +47,5 @@ def consultarChaves(chaves):
             time.sleep(2)  # Optional: sleep to avoid overwhelming the server
         except requests.exceptions.RequestException as e:
             print(f"An error occurred while consulting {chave}: {e}")
-
-def salvarPagina(chave, response_text):
-	with open(f"./chaves/{chave}.html", "w", encoding="utf-8") as file:
-		file.write(response_text)
-	print(f"Response for {chave} saved to ./chaves/{chave}.html")
-
+            
 consultarChaves(chavesNfe)
